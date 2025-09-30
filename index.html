@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aadyasha Sahoo | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Define CSS Variables for Theming */
+        :root {
+            /* For Dark Mode */
+            --bg-color: #111827; 
+            --text-color: #e5e7eb;
+            --card-bg: #1f2937; 
+            --accent-color: #f59e0b; 
+            --progress-track: #4b5563; 
+            --profile-glow: 0 0 15px rgba(245, 158, 11, 0.7); 
+            
+            --footer-bg: #0f172a; 
+            --footer-text: #e2e8f0; 
+            --footer-sub-text: #94a3b8; 
+        }
+
+        
+        body.light-mode {
+            --bg-color: #f4f4f4; 
+            --text-color: #374151; 
+            --card-bg: #ffffff; 
+            --accent-color: #d97706; 
+            --progress-track: #9ca3af; 
+            --profile-glow: 0 0 15px rgba(217, 119, 6, 0.5); 
+
+            /* Footer Styling Variables (Light Mode) */
+            --footer-bg: #e2e8f0; 
+            --footer-text: #374151; 
+            --footer-sub-text: #475569; 
+        }
+
+        
+        .bg-body { background-color: var(--bg-color); }
+        .bg-card { background-color: var(--card-bg); }
+        .text-body { color: var(--text-color); }
+        .text-secondary { color: var(--progress-track); }
+        
+        /* Footer Specific Styles */
+        .bg-footer { background-color: var(--footer-bg); }
+        .text-footer { color: var(--footer-text); }
+        .text-footer-secondary { color: var(--footer-sub-text); }
+
+        /* General Body Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            transition: background-color 0.5s, color 0.5s; 
+        }
+
+        .span-col, .text-accent {
+            color: var(--accent-color); 
+        }
+
+        .border-accent { border-color: var(--accent-color); }
+        .bg-accent { background-color: var(--accent-color); color: var(--bg-color); }
+
+        /* Profile Image Styling:*/
+        .profile-img-container {
+            
+            aspect-ratio: 1 / 1; 
+            max-width: 400px; 
+            width: 100%;
+            border-radius: 50%;
+            overflow: hidden; 
+            box-shadow: var(--profile-glow); 
+            transition: box-shadow 0.4s; 
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+          
+            object-fit: cover; 
+        }
+
+        /* Custom styles for circular progress bars (using variables) */
+        div[role="progressbar"] {
+            
+            --size: 120px;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            transition: background 1.5s ease-out 0.5s; 
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-align: center;
+            padding: 10px; 
+            line-height: 1.2;
+        }
+
+        /* Mobile menu transition */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Skill bar animation styles */
+        .skill-bar-progress {
+            width: 0; /* Default width for reset */
+            transition: width 1.5s ease-out 0.5s;
+        }
+
+        /* Hover effect for buttons using the accent color */
+        .btn-hover-effect:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .bg-accent-hover:hover {
+            
+            background-color: var(--progress-track); 
+        }
+
+        /* --- NEW: FRONT SECTION ANIMATION (HEADER AND TOGGLE) --- */
+        
+        
+        .header-initial, #theme-toggle {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s; 
+        }
+        
+        /* Final state (visible and in position) - applied via JavaScript on page load */
+        .header-animate, .theme-toggle-animate {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Sun/Moon Toggle Button styling - POSITIONING REMOVED, NOW INLINE */
+        #theme-toggle {
+            z-index: 60;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s, opacity 0.8s ease-out 0.3s, scale 0.2s; 
+        }
+        
+        /* --- SCROLL ANIMATION STYLES (for everything else) ---- */
+
+        /* Base state for animated elements (hidden and slightly moved) */
+        .animated-element {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        /* Specific transform states */
+        .slide-up {
+            transform: translateY(30px);
+        }
+        .slide-left {
+            transform: translateX(-30px);
+        }
+        .slide-right {
+            transform: translateX(30px);
+        }
+
+        /* Target state when the element is visible (triggers the animation) */
+        .animated-element.show {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+        
+        /* New custom class for active navigation link */
+        .nav-link-active {
+            color: var(--accent-color) !important; 
+        }
+        
+        /* --- FOOTER NAV PILL STYLING (For Decongestion and Contrast) --- */
+
+        
+        .bg-pill-container {
+            background-color: #1f2937; 
+        }
+        body.light-mode .bg-pill-container {
+            background-color: #e5e7eb; 
+        }
+
+        /* Inactive Pill Style */
+        .footer-nav-pill {
+            background-color: #374151; 
+            color: #f3f4f6; 
+            white-space: nowrap; 
+        }
+        .footer-nav-pill:hover:not(.footer-nav-pill-active) {
+            background-color: #4b5563; 
+        }
+
+        body.light-mode .footer-nav-pill {
+            background-color: #d1d5db; 
+            color: #1f2937; 
+        }
+        body.light-mode .footer-nav-pill:hover:not(.footer-nav-pill-active) {
+            background-color: #ffffff; 
+        }
+
+        /* Active Pill Style (High Contrast using Accent Color) */
+        .footer-nav-pill-active {
+            background-color: var(--accent-color) !important; 
+            color: var(--bg-color) !important; 
+        }
+        body.light-mode .footer-nav-pill-active {
+            background-color: var(--accent-color) !important; 
+            color: #ffffff !important; 
+        }
+    </style>
+</head>
+
+<body class="bg-body text-body">
+
+    <!-- HEADER & NAVIGATION -->
+    <header id="main-header" class="bg-card/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 transition duration-500 header-initial">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Left Group: Theme Toggle and Logo -->
+                <div class="flex items-center space-x-4">
+                    <!-- THEME TOGGLE BUTTON - Now inline with logo -->
+                    <button id="theme-toggle" class="bg-card text-accent border border-progress-track hover:scale-105 header-initial" aria-label="Toggle dark/light mode">
+                        <i id="theme-icon" class="fas fa-sun text-2xl"></i>
+                    </button>
+                    <!-- Logo -->
+                    <div class="flex-shrink-0">
+                        <a href="#home" class="text-3xl font-bold">He<span class="span-col">llo!</span></a>
+                    </div>
+                </div>
+                <!-- Desktop Navigation: Added desktop-nav-link class and removed permanent text-accent -->
+                <nav class="hidden md:flex items-center space-x-8" id="desktop-nav">
+                    <a href="#home" class="desktop-nav-link text-lg font-medium hover:text-accent transition duration-300">Home</a>
+                    <a href="#about" class="desktop-nav-link text-lg font-medium hover:text-accent transition duration-300">About me</a>
+                    <a href="#skills" class="desktop-nav-link text-lg font-medium hover:text-accent transition duration-300">Skills</a>
+                    <a href="#projects" class="desktop-nav-link text-lg font-medium hover:text-accent transition duration-300">Projects</a>
+                    <a href="#contact" class="desktop-nav-link text-lg font-medium hover:text-accent transition duration-300">Contact</a>
+                </nav>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-body hover:text-accent focus:outline-none transition duration-300">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-card absolute w-full -translate-x-full transition duration-500">
+            <nav class="flex flex-col items-center space-y-4 py-6">
+                <a href="#home" class="mobile-nav-link text-lg font-medium hover:text-accent transition duration-300">Home</a>
+                <a href="#about" class="mobile-nav-link text-lg font-medium hover:text-accent transition duration-300">About me</a>
+                <a href="#skills" class="mobile-nav-link text-lg font-medium hover:text-accent transition duration-300">Skills</a>
+                <a href="#projects" class="mobile-nav-link text-lg font-medium hover:text-accent transition duration-300">Projects</a>
+                <a href="#contact" class="mobile-nav-link text-lg font-medium hover:text-accent transition duration-300">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- HOME SECTION / MAIN BANNER -->
+        <section id="home" class="min-h-screen flex items-center pt-32 bg-body">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col-reverse md:flex-row items-center gap-8">
+                    <!-- Left Content -->
+                    <div class="w-full md:w-1/2 text-center md:text-left animated-element slide-left">
+                        <div class="banner-section">
+                            <span class="span-col text-lg font-semibold">Welcome To My Portfolio</span>
+                            <h1 class="text-5xl lg:text-7xl font-black my-2">Aadyasha <span class="span-col">Sahoo</span></h1>
+                            <h2 class="text-body leading-relaxed mb-6">- Dedicated Web Developer with a strong passion for creating innovative and efficient web solutions.</h2>
+                            
+                            <!-- Download CV Button -->
+                            <div class="mt-8 mb-6 flex justify-center md:justify-start">
+                                <a href="images/Aadyasha Sahoo_Resume.jpg" download="AadyashaSahoo_Resume.jpg" 
+                                    class="bg-accent text-body font-bold py-3 px-8 rounded-full shadow-xl hover:scale-[1.03] transition duration-300 flex items-center justify-center w-full sm:w-auto">
+                                        <i class="fas fa-download mr-3"></i> Download CV
+                                </a>
+                            </div>
+
+                            <!-- Social Media Icons (Updated: LinkedIn, GitHub, WhatsApp) -->
+                            <div class="flex justify-center md:justify-start space-x-4">
+                                <!-- LinkedIn -->
+                                <a href="https://www.linkedin.com/in/aadyashasahoo/" target="_blank" rel="noopener noreferrer" class="w-12 h-12 flex items-center justify-center text-accent border-2 border-accent rounded-full hover:bg-accent hover:text-body transition duration-300" aria-label="LinkedIn Profile">
+                                    <i class="fab fa-linkedin-in text-xl"></i>
+                                </a>
+                                <!-- GitHub -->
+                                <a href="https://github.com/aadyasha" target="_blank" rel="noopener noreferrer" class="w-12 h-12 flex items-center justify-center text-accent border-2 border-accent rounded-full hover:bg-accent hover:text-body transition duration-300" aria-label="GitHub Profile">
+                                    <i class="fab fa-github text-xl"></i>
+                                </a>
+                                <!-- WhatsApp -->
+                                <a href="https://api.whatsapp.com/send/?phone=7008705289&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="w-12 h-12 flex items-center justify-center text-accent border-2 border-accent rounded-full hover:bg-accent hover:text-body transition duration-300" aria-label="WhatsApp Contact">
+                                    <i class="fab fa-whatsapp text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Image: Updated to use an uploaded image file -->
+                    <div class="w-full md:w-1/2 flex justify-center animated-element slide-right">
+                        <div class="profile-img-container">
+                            <!-- Using the uploaded image file name directly -->
+                            <img src="images/Aadyasha_mainpage.png" onerror="this.onerror=null;this.src='https://placehold.co/400x400/1f2937/f59e0b?text=Aadyasha+Sahoo';" alt="Aadyasha Sahoo Profile Picture">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT ME SECTION -->
+        <section id="about" class="py-24 bg-card">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    
+                    <div class="w-full md:w-5/12 animated-element slide-left">
+
+                        <img src="images/AS IMG.png" onerror="this.onerror=null;this.src='https://placehold.co/400x400/1f2937/f59e0b?text=About+Image';" alt="About Aadyasha Sahoo" class="rounded-lg shadow-2xl w-full">
+                    </div>
+                    <!-- About Content -->
+                    <div class="w-full md:w-7/12 animated-element slide-right">
+                        <h2 class="text-4xl font-bold text-center md:text-left mb-6">About <span class="span-col">Me</span></h2>
+                        <h3 class="text-2xl font-semibold text-body mb-4">I appreciate the opportunity to connect with you.</h3>
+                    
+                        <p class="text-body leading-relaxed mb-6">My name is Aadyasha Sahoo, an undergraduate in Electronics and Telecommunication Engineering from India with a strong passion for web development. I specialize in creating modern, responsive web applications and am dedicated to delivering high-quality code and exceptional user experiences. Continuously seeking to enhance my skills and adopt emerging technologies, I strive to develop innovative solutions for real-world challenges. My work is characterized by a positive attitude and a commitment to making meaningful contributions to projects and teams.</p> 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-lg">
+                            <p><strong>Name:</strong> Aadyasha Sahoo</p>
+                            <p><strong>Phone:</strong> (+91) 70087-05289</p>
+                            <p><strong>Email:</strong>aadyashasahoobharat@gmail.com</p>
+                            <p><strong>City:</strong> India</p>
+                            <p><strong>Birthday:</strong> 25 July 2004</p>
+                            <p><strong>Study:</strong> Electronics and Telecommunication Engineering</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills" class="py-24 bg-body">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 animated-element slide-up">My <span class="span-col">Skills</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                    <!-- Linear Progress Bars -->
+                    <div class="animated-element slide-left">
+                        <div class="skill mb-6">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-lg">HTML</span>
+                                <span class="text-secondary">95%</span>
+                            </div>
+                            <div class="w-full bg-progress-track rounded-full h-2.5">
+                                <div class="skill-bar-progress bg-accent h-2.5 rounded-full" data-level="95"></div>
+                            </div>
+                        </div>
+                        <div class="skill mb-6">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-lg">CSS</span>
+                                <span class="text-secondary">91%</span>
+                            </div>
+                            <div class="w-full bg-progress-track rounded-full h-2.5">
+                                <div class="skill-bar-progress bg-accent h-2.5 rounded-full" data-level="91"></div>
+                            </div>
+                        </div>
+                        <div class="skill mb-6">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-lg">JavaScript</span>
+                                <span class="text-secondary">65%</span>
+                            </div>
+                            <div class="w-full bg-progress-track rounded-full h-2.5">
+                                <!-- Note: Data-level was 85%, changed to 65% to match display text -->
+                                <div class="skill-bar-progress bg-accent h-2.5 rounded-full" data-level="65"></div> 
+                            </div>
+                        </div>
+                        <div class="skill mb-6">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-lg">JAVA</span>
+                                <span class="text-secondary">50%</span>
+                            </div>
+                            <div class="w-full bg-progress-track rounded-full h-2.5">
+                                <!-- Note: Data-level was 79%, changed to 50% to match display text -->
+                                <div class="skill-bar-progress bg-accent h-2.5 rounded-full" data-level="50"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Circular Progress Bars: Now using data-value instead of inline style for easy reset -->
+                    <div class="grid grid-cols-2 gap-8 justify-items-center animated-element slide-right">
+                        <div role="progressbar" data-value="65">Python: 65%</div>
+                        <div role="progressbar" data-value="85">C++: 85%</div>
+                        <div role="progressbar" data-value="20">SAP: 20%</div> 
+                        <div role="progressbar" data-value="75">Verilog: 75%</div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-24 bg-card">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 animated-element slide-up">My <span class="span-col">Projects</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1: Flower Shop Website -->
+                    <div class="hover:scale-110 bg-body rounded-lg overflow-hidden shadow-lg group animated-element slide-up" style="transition-delay: 0.0s;">
+                        <div class="relative overflow-hidden">
+                            <!-- Updated to use an uploaded image file -->
+                             <img src="images/flowers.png" onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/f59e0b?text=Flower+Shop+Website';" alt="Flower Shop Website" class="w-full h-auto group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Flower Shop Website</h3>
+                            <p class="text-secondary mb-4">A beautifully designed e-commerce site for flowers, built with responsive design for optimal mobile and desktop viewing.</p>
+                            <a href="https://github.com/aadyasha/Flower-Shop-Website" target="_blank" rel="noopener noreferrer" class="inline-block bg-accent text-body font-bold py-2 px-4 rounded-md hover:bg-accent-hover transition duration-300">
+                                View Code <i class="fab fa-github ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Social Network Application -->
+                    <div class="bg-body rounded-lg overflow-hidden shadow-lg group animated-element slide-up" style="transition-delay: 0.1s;">
+                        <div class="relative overflow-hidden">
+                            <img src="images/project 2.png" onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/f59e0b?text=Social+Network+Platform';" alt="Social Network Application" class="w-full h-auto group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Social Network Application </h3>
+                            <p class="text-secondary mb-4">A full-stack social networking platform enabling user profiles, posts, real-time interactions, and direct messaging features.</p>
+                            <a href="https://github.com/aadyasha/Social-Network-Application" target="_blank" rel="noopener noreferrer" class="inline-block bg-accent text-body font-bold py-2 px-4 rounded-md hover:bg-accent-hover transition duration-300">
+                                View Code <i class="fab fa-github ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Image Editor -->
+                    <div class="bg-body rounded-lg overflow-hidden shadow-lg group animated-element slide-up" style="transition-delay: 0.2s;">
+                        <div class="relative overflow-hidden">
+                           <img src="images/project 3.png" onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/f59e0b?text=Canvas+Image+Editor';" alt="Image Editor" class="w-full h-auto group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Image Editor </h3>
+                            <p class="text-secondary mb-4">A web-based tool for basic image manipulation, including cropping, resizing, and applying various filters using the Canvas API.</p>
+                            <a href="https://github.com/aadyasha/Image-Editor" target="_blank" rel="noopener noreferrer" class="inline-block bg-accent text-body font-bold py-2 px-4 rounded-md hover:bg-accent-hover transition duration-300">
+                                View Code <i class="fab fa-github ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-24 bg-body">
+             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                 <h2 class="text-4xl font-bold text-center mb-12 animated-element slide-up">Get In <span class="span-col">Touch</span> </h2>
+                 <div class="max-w-3xl mx-auto animated-element slide-up" style="transition-delay: 0.1s;">
+                     <form>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                             <input type="text" placeholder="Full Name..." class="w-full bg-card border-2 border-progress-track rounded-md py-3 px-4 focus:outline-none focus:border-accent transition text-body">
+                             <input type="email" placeholder="Email Address..." class="w-full bg-card border-2 border-progress-track rounded-md py-3 px-4 focus:outline-none focus:border-accent transition text-body">
+                         </div>
+                         <input type="text" placeholder="Subject..." class="w-full bg-card border-2 border-progress-track rounded-md py-3 px-4 mb-6 focus:outline-none focus:border-accent transition text-body">
+                         <textarea placeholder="Your Message..." rows="5" class="w-full bg-card border-2 border-progress-track rounded-md py-3 px-4 mb-6 focus:outline-none focus:border-accent transition text-body"></textarea>
+                         <button type="submit" class="w-full bg-accent text-body font-bold py-3 px-6 rounded-md hover:scale-[1.01] hover:shadow-xl transition duration-300">
+                             Submit Message
+                         </button>
+                     </form>
+                 </div>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-20 animated-element slide-up" style="transition-delay: 0.2s;">
+                      <!-- Contact Info Blocks -->
+                      <div class="bg-card p-6 rounded-lg shadow-xl">
+                          <i class="fas fa-map-marker-alt text-4xl text-accent mb-3"></i>
+                          <h4 class="text-xl font-bold">Address</h4>
+                          <p class="text-secondary">India</p>
+                      </div>
+                      <div class="bg-card p-6 rounded-lg shadow-xl">
+                          <i class="fas fa-phone text-4xl text-accent mb-3"></i>
+                          <h4 class="text-xl font-bold">Phone</h4>
+                          <p class="text-secondary">+91 70087 05289</p>
+                      </div>
+                      <div class="bg-card p-6 rounded-lg shadow-xl">
+                          <i class="fas fa-envelope text-4xl text-accent mb-3"></i>
+                          <h4 class="text-xl font-bold">Email</h4>
+                          <p class="text-secondary">aadyashasahoobharat@gmail.com</p>
+                      </div>
+                 </div>
+             </div>
+        </section>
+    </main>
+
+    <!-- FOOTER: REDESIGNED TO MATCH UPLOADED IMAGE STYLE -->
+    <footer class="bg-footer py-12 text-footer">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Top Row: Information Columns (Retained for structure) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 text-sm">
+                
+                <!-- Column 1: Get in Touch -->
+                <div>
+                    <h5 class="text-lg font-bold mb-3 text-footer">Get in touch</h5>
+                    <ul class="space-y-1 text-footer-secondary">
+                        <li><a href="mailto:aadyashasahoobharat@gmail.com" class="hover:text-accent transition duration-200">aadyashasahoobharat@gmail.com</a></li>
+                        <li><a href="tel:+917008705289" class="hover:text-accent transition duration-200">(+91) 70087-05289</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Connect (Social Media) -->
+                <div>
+                    <h5 class="text-lg font-bold mb-3 text-footer">Connect</h5>
+                    <ul class="space-y-1 text-footer-secondary">
+                        <li><a href="https://www.linkedin.com/in/aadyashasahoo/" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition duration-200">LinkedIn</a></li>
+                        <li><a href="https://github.com/aadyasha" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition duration-200">GitHub</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Professional Info (Placeholder/Expansion) -->
+                <div>
+                    <h5 class="text-lg font-bold mb-3 text-footer">Education</h5>
+                    <ul class="space-y-1 text-footer-secondary">
+                        <li>Electronics and Telecommunication Engineering</li>
+                        <li>VSSUT, Burla</li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Location/Time (Placeholder) -->
+                <div>
+                    <h5 class="text-lg font-bold mb-3 text-footer">Location</h5>
+                    <ul class="space-y-1 text-footer-secondary">
+                        <li>Bhubaneswar, India</li>
+                        <li><a href="#contact" class="hover:text-accent transition duration-200"></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Separator -->
+            <div class="border-t border-gray-700/50 mb-6"></div>
+
+            <!-- Bottom Row: Copyright, Privacy, and Navigation Pills (Decongested) -->
+            <div class="flex flex-col md:flex-row items-center justify-between text-footer-secondary text-xs space-y-4 md:space-y-0">
+                
+                <!-- Left: Copyright and Links -->
+                <div class="flex items-center space-x-4">
+                    <p class="text-sm">&copy; 2025 Aadyasha Sahoo</p>
+                    <a href="#" class="hover:text-accent transition duration-200 hidden sm:inline">Privacy</a>
+                    <a href="#" class="hover:text-accent transition duration-200 hidden sm:inline">Imprint</a>
+                </div>
+
+                <!-- Increased padding (p-2) and spacing (space-x-2) for better separation -->
+                <div class="flex bg-pill-container rounded-full p-2 shadow-2xl space-x-2">
+                    <a href="#home" class="footer-nav-pill footer-nav-pill-active text-sm font-semibold py-2 px-6 rounded-full transition duration-100">Profile</a>
+                    <a href="#about" class="footer-nav-pill text-sm font-semibold py-2 px-6 rounded-full transition duration-100">About</a>
+                    <a href="#skills" class="footer-nav-pill text-sm font-semibold py-2 px-6 rounded-full transition duration-100">Skills</a>
+                    <a href="#contact" class="footer-nav-pill text-sm font-semibold py-2 px-6 rounded-full transition duration-100">Contact</a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const body = document.body;
+        const skillsSection = document.getElementById('skills');
+        const skillBars = document.querySelectorAll('.skill-bar-progress');
+        const circularBars = document.querySelectorAll('div[role="progressbar"]');
+        const animatedElements = document.querySelectorAll('.animated-element');
+        const mainHeader = document.getElementById('main-header'); // Get the header element
+        
+        // Navigation elements for active state tracking
+        const sections = document.querySelectorAll('section');
+        const desktopNavLinks = document.querySelectorAll('.desktop-nav-link');
+        // NEW: Footer Navigation Pills
+        const footerNavPills = document.querySelectorAll('.bg-pill-container a[href^="#"]');
+
+        // --- PAGE LOAD ANIMATION FOR HEADER AND TOGGLE ---
+        window.onload = () => {
+            // Animate the header and theme toggle on page load
+            if (mainHeader) {
+                mainHeader.classList.remove('header-initial');
+                mainHeader.classList.add('header-animate');
+            }
+            if (themeToggle) {
+                themeToggle.classList.remove('header-initial');
+                themeToggle.classList.add('theme-toggle-animate');
+            }
+
+            // Manually ensure the Home section elements are visible on load
+            document.querySelector('#home .animated-element.slide-left').classList.add('show');
+            document.querySelector('#home .animated-element.slide-right').classList.add('show');
+        };
+
+        // Function to toggle the mobile menu
+        const toggleMenu = () => {
+            mobileMenu.classList.toggle('translate-x-0');
+            mobileMenu.classList.toggle('-translate-x-full');
+            const icon = mobileMenuButton.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        };
+
+        // Close mobile menu on button click
+        mobileMenuButton.addEventListener('click', toggleMenu);
+
+        // Close mobile menu when a link is clicked
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('translate-x-0')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // --- THEME TOGGLE LOGIC ---
+
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            // Default is dark mode
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLightMode = body.classList.contains('light-mode');
+
+            // Update icon and save preference
+            if (isLightMode) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // --- SKILL BAR ANIMATION LOGIC (Intersection Observer) ---
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    
+                    
+                    // 1. Linear Bars
+                    skillBars.forEach(bar => {
+                        const level = bar.getAttribute('data-level');
+                        bar.style.width = level + '%';
+                    });
+                    
+                    // 2. Circular Bars
+                    circularBars.forEach(bar => {
+                        const level = bar.getAttribute('data-value');
+                        // Use CSS variables for background/text color, but set the percentage here
+                        bar.style.background = `
+                            radial-gradient(closest-side, var(--bg-color) 80%, transparent 0 99.9%, var(--bg-color) 0),
+                            conic-gradient(var(--accent-color) ${level}%, var(--progress-track) 0)
+                        `;
+                    });
+
+                } else {
+                    // Reset on Exit (Prepare for next animation to ensure re-animation)
+                    
+                    // 1. Linear Bars
+                    skillBars.forEach(bar => {
+                        bar.style.width = '0%';
+                    });
+                    
+                    // 2. Circular Bars - Reset to 0% gradient fill
+                    circularBars.forEach(bar => {
+                        bar.style.background = `
+                            radial-gradient(closest-side, var(--bg-color) 80%, transparent 0 99.9%, var(--bg-color) 0),
+                            conic-gradient(var(--accent-color) 0%, var(--progress-track) 0)
+                        `;
+                    });
+                }
+            });
+        }, { threshold: 0.5 }); 
+
+        // Start observing the skills section
+        if (skillsSection) {
+            skillObserver.observe(skillsSection);
+        }
+        
+        // --- GENERAL SCROLL ANIMATION LOGIC (Intersection Observer) ---
+        
+        const animateObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    // Stop observing once it's animated
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }); // Trigger when 10% is visible, with a small bottom margin
+
+        // Attach observer to all elements with the class 'animated-element'
+        animatedElements.forEach(element => {
+            
+            if (!element.closest('#home')) {
+                animateObserver.observe(element);
+            }
+        });
+        
+        // --- ACTIVE NAVIGATION LINK TRACKING ---
+        function setActiveLink(sectionId) {
+            
+            desktopNavLinks.forEach(link => {
+                link.classList.remove('nav-link-active');
+            });
+            const activeDesktopLink = document.querySelector(`.desktop-nav-link[href="#${sectionId}"]`);
+            if (activeDesktopLink) {
+                activeDesktopLink.classList.add('nav-link-active');
+            }
+
+            // 2. Footer Nav Pills
+            footerNavPills.forEach(pill => {
+                pill.classList.remove('footer-nav-pill-active');
+            });
+            
+            let pillSectionId = sectionId;
+            if (sectionId === 'projects') {
+                pillSectionId = 'skills'; 
+            }
+            
+            const activeFooterPill = document.querySelector(`.bg-pill-container a[href="#${pillSectionId}"]`);
+            if (activeFooterPill) {
+                activeFooterPill.classList.add('footer-nav-pill-active');
+            }
+        }
+
+        // Intersection Observer for sections to track active link
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    setActiveLink(sectionId);
+                }
+            });
+        }, {
+            rootMargin: '-90px 0px -90% 0px', 
+            threshold: 0 
+        });
+
+        
+        sections.forEach(section => {
+            navObserver.observe(section);
+        });
+        
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            setActiveLink('home');
+        });
+
+    </script>
+</body>
+
+</html>
